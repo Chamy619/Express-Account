@@ -1,0 +1,5 @@
+## 설치한 모듈
+myapp/node_modules
+
+## 데이터베이스 접근 파일
+myapp/conf/javascripts/db.js

@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 Login
+  h3(style='color:red') #{flash}
+  form(action='/login/process' method='post')
+    p
+        input(type='text' name='id' placeholder='Type your id')
+    p
+        input(type='password' name='pwd' placeholder='Type your password')
+    p
+        input(type='submit')
+    p
+        a(href="/create")   회원가입
