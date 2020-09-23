@@ -4,7 +4,7 @@ block content
   p #{name} welcome || 
     a(href="/logout") logout
   h1=title
-  form(action="/account/outcome/process" method="post")
+  form(action="/account/update/outcome/#{id}/process" method="post")
     p
         input(type="text" name="title" placeholder="Type title" value="#{ptitle}")
     p

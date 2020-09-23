@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  p #{name} welcome || 
+    a(href="/logout") logout
+  h1=title
+  table
+    tr
+      th 종류
+      th 제목
+      th 금액
+      th 날짜
+      th 수정
+      th 삭제
+    !{lists}
+  h3 잔액 : 

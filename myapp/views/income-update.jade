@@ -4,11 +4,9 @@ block content
   p #{name} welcome || 
     a(href="/logout") logout
   h1=title
-  form(action="/account/outcome/process" method="post")
+  form(action="/account/update/income/#{id}/process" method="post")
     p
         input(type="text" name="title" placeholder="Type title" value="#{ptitle}")
-    p
-        input(type="text" name="target" placeholder="Type target" value="#{ptarget}") 
     p
         input(type="text" name="price" placeholder="Type price" value="#{pprice}")
     p   

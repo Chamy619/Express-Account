@@ -6,10 +6,10 @@ block content
   h1=title
   form(action="/account/income/process" method="post")
     p
-        input(type="text" name="title" placeholder="Type title")
+        input(type="text" name="title" placeholder="Type title" value="#{ptitle}")
     p
-        input(type="text" name="price" placeholder="Type price")
+        input(type="text" name="price" placeholder="Type price" value="#{pprice}")
     p   
-        input(type="text" name="date" id="datepicker" placeholder="Choose date")
+        input(type="text" name="date" id="datepicker" placeholder="Choose date" value="#{pcalen}")
     p
         input(type="submit")
