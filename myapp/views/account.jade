@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  p #{name} welcome || 
+    a(href="/logout") logout
+  h1 Choose menu
+  ul
+    li 
+        a(href="/account/income")   입금 내역 입력
+    li  
+        a(href="/account/outcome")  출금 내역 입력
+    li 
+        a(href="/account/list") 거래내역
+  h3 잔액 : 

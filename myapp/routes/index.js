@@ -1,14 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const flash = require("connect-flash");
 
 const bodyParser = require("body-parser");
 const bcryptjs = require("bcryptjs");
-const flash = require("connect-flash");
-const passport = require("passport"),
-  LocalStrategy = require("passport-local").Strategy;
-const db = require("../conf/db");
-const auth = require("../public/javascripts/auth.js");
-
 var session = require("express-session");
 var MySQLStore = require("express-mysql-session")(session);
 
@@ -21,7 +16,6 @@ var options = {
 };
 
 var sessionStore = new MySQLStore(options);
-
 router.use(
   session({
     secret: "asdfzxcvqwerpou",
@@ -31,59 +25,14 @@ router.use(
   })
 );
 
-router.use(passport.initialize());
-router.use(passport.session());
+const db = require("../conf/db");
+const auth = require("../public/javascripts/auth");
+const formCheck = require("../public/javascripts/formCheck");
+
 router.use(flash());
+router.use(bodyParser.urlencoded({ extended: false }));
 
-passport.serializeUser(function (user, done) {
-  console.log("serializeUser", user);
-  return done(null, user.user_id);
-});
-
-passport.deserializeUser(function (id, done) {
-  console.log("deserializeUser", id);
-  db.query("SELECT * FROM users WHERE user_id=?", [id], function (error, user) {
-    if (error) {
-      next();
-    }
-    if (user.length === 0) {
-      return done(null, false, { message: "Incorrect session" });
-    } else {
-      done(null, user);
-    }
-  });
-});
-
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "id",
-      passwordField: "pwd",
-    },
-    function (username, password, done) {
-      db.query("SELECT * FROM users WHERE user_id=?", [username], function (
-        error,
-        user
-      ) {
-        if (error) {
-          next(error);
-        } else {
-          if (user.length === 0) {
-            return done(null, false, { message: "Incorrect username." });
-          } else {
-            bcryptjs.compare(password, user[0].pwd, function (err, result) {
-              if (result) {
-                return done(null, user[0]);
-              } else {
-                return done(null, false, { message: "Incorrect password" });
-              }
-            });
-          }
-        }
-      });
-    }
-  )
-);
+var passport = require("../public/javascripts/passport")(router);
 
 router.post("/login/process", function (req, res, next) {
   passport.authenticate("local", {
@@ -97,8 +46,9 @@ router.get("/", function (req, res, next) {
   console.log("home", req.user);
   if (auth.isLogined(req, res)) {
     res.render("index", {
-      title: "Express123",
-      description: "Express is ...",
+      title: "Woori Middle and High School Students Account",
+      description: "This page is used by only woori church",
+      name: req.user,
     });
   } else {
     var fmsg = req.flash();
@@ -122,16 +72,8 @@ router.get("/create", function (req, res, next) {
 router.post("/create/process", function (req, res, next) {
   const id = req.body.id;
   const pw1 = req.body.pwd;
-  const pw2 = req.body.pwd2;
 
-  if (id === "") {
-    req.flash("error", "Must type your ID!!!");
-    res.redirect("/create");
-  } else if (pw1 === "" || pw2 === "") {
-    req.flash("error", "Must type your PW!!!");
-    res.redirect("/create");
-  } else if (pw1 !== pw2) {
-    req.flash("error", "PW must same!!!");
+  if (!formCheck.registerCheck(req, res)) {
     res.redirect("/create");
   } else {
     db.query("SELECT * FROM users WHERE user_id=?", [id], function (

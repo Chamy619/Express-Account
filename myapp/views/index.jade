@@ -1,7 +1,9 @@
 extends layout
 
 block content
-  a(href="/logout") logout
+  p #{name} welcome || 
+    a(href="/logout") logout
   h1= title
-  p Welcome to #{title}
   p #{description}
+  p
+    a(href="/account") 계좌 보러가기
