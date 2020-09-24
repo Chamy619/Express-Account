@@ -17,19 +17,19 @@ nodejs-express를 사용하여 구현하였음<br>
 
 로그인 후 서비스를 이용할 수 있도록 구현<br>
 로그인 하지 않았을 경우 어떤 페이지로 들어가더라도 로그인 화면으로 이동<br>
-<img src="/myapp/public/images/login.png">
+<img src="/myapp/public/images/login.png" display="block">
 로그인은 사용자의 id와 pw를 데이터베이스에 있는 사용자 정보와 조회해 일치할 경우 로그인 성공<br>
 사용자 정보와 일치하지 않을 경우 경고메시지 출력<br>
-<img src="/myapp/public/images/login_fail.png">
+<img src="/myapp/public/images/login_fail.png" display="block">
 
 ## 회원 가입
 
 ID와 패스워드를 입력해 회원가입을 진행<br>
-<img src="/myapp/public/images/register.png">
+<img src="/myapp/public/images/register.png" display="block">
 ID를 작성하지 않거나, 이미 존재하는 아이디일 경우, 패스워드를 작성하지 않거나, 두 개의 패스워드가 일치하지 않을 경우 상황에 맞는 경고메시지 출력<br>
 새로고침 시 경고메시지 삭제<br>
-<img src="/myapp/public/images/register_fail1.png">
-<img src="/myapp/public/images/register_fail2.png">
+<img src="/myapp/public/images/register_fail1.png" display="block">
+<img src="/myapp/public/images/register_fail2.png" display="block">
 <img src="/myapp/public/images/register_fail3.png">
 회원 가입에 성공하면 로그인 화면으로 자동 이동<br>
 회원 가입시 입력한 비밀번호는 암호화해서 저장
