@@ -1,12 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../conf/db");
+var auth = require("../public/javascripts/auth");
+
+router.use(function (req, res, next) {
+  if (!auth.isLogined(req, res)) {
+    res.redirect("/");
+  } else {
+    next();
+  }
+});
 
 router.get("/", function (req, res, next) {
-  res.render("account", {
-    title: "Account",
-    name: req.user,
-  });
+  db.query(
+    "SELECT (SELECT SUM(price) FROM income)-(SELECT SUM(price) FROM outcome) AS balance",
+    function (err, bal) {
+      if (err) {
+        next(err);
+      }
+      res.render("account", {
+        title: "Account",
+        name: req.user,
+        balance: bal[0].balance,
+      });
+    }
+  );
 });
 
 router.get("/income", function (req, res, next) {
@@ -84,11 +102,20 @@ router.get("/list", function (req, res, next) {
         table_list += "</tr>\n";
       }
 
-      res.render("list", {
-        name: req.user,
-        title: "List",
-        lists: table_list,
-      });
+      db.query(
+        "SELECT (SELECT SUM(price) FROM income)-(SELECT SUM(price) FROM outcome) AS balance",
+        function (err, bal) {
+          if (err) {
+            next(err);
+          }
+          res.render("list", {
+            name: req.user,
+            title: "List",
+            lists: table_list,
+            balance: bal[0].balance,
+          });
+        }
+      );
     }
   );
 });
