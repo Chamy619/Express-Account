@@ -58,4 +58,28 @@ ID를 작성하지 않거나, 이미 존재하는 아이디일 경우, 패스워
 그동안의 거래 내역을 날짜순으로 출력<br>
 거래 내역의 수정과 삭제를 할 수 있음
 <img src="myapp/public/images/list1.png"><br>
-<img src="myapp/public/images/list2.png"><br>
+<img src="myapp/public/images/list2.png"><br><br>
+
+2020.09.25<br>
+거래 내역이 너무 길게 나오는 불편을 해소하기 위해 페이징 기능을 통해 한 페이지에 10개씩 보여주기로 함<br>
+<img src="myapp/public/images/page.png"><br>
+
+#### 페이징 소스코드
+
+데이터베이스 LIMIT으로 구현하지 않고, 전체 데이터를 받아온 후 javascript를 통해 페이징 기능을 구현<br>
+효율성과 지연 시간을 고려해 추후 데이터베이스 LIMIT으로 변경할 예정<br>
+
+```javascript
+var page = parseInt(lists.length / 10);
+if (lists.length % 10 !== 0) {
+  page += 1;
+}
+
+var pageList = "";
+for (i = 1; i <= page; i++) {
+  pageList += `|<a href=/account/list/${i}>${i}</a>|`;
+}
+
+...
+}
+```
