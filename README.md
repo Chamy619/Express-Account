@@ -75,14 +75,23 @@ ID를 작성하지 않거나, 이미 존재하는 아이디일 경우, 패스워
 <img src="myapp/public/images/list1.png"><br>
 <img src="myapp/public/images/list2.png"><br><br>
 
-2020.09.25<br>
-거래 내역이 너무 길게 나오는 불편을 해소하기 위해 페이징 기능을 통해 한 페이지에 10개씩 보여주기로 함<br>
-<img src="myapp/public/images/page.png"><br>
-
 #### 페이징 소스코드
 
 데이터베이스 LIMIT으로 구현하지 않고, 전체 데이터를 받아온 후 javascript를 통해 페이징 기능을 구현<br>
 효율성과 지연 시간을 고려해 추후 데이터베이스 LIMIT으로 변경할 예정<br>
+
+#### 2020.09.25
+
+거래 내역이 너무 길게 나오는 불편을 해소하기 위해 페이징 기능을 통해 한 페이지에 10개씩 보여주기로 함<br>
+<img src="myapp/public/images/page.png"><br>
+
+#### 2020.09.25
+
+데이터베이스의 부담을 줄이기 위해 LIMIT를 통한 페이징 구현<br>
+
+```sql
+(SELECT id,1 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM income) UNION (SELECT id,2 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM outcome) order by calen limit ${start}, 10`
+```
 
 ```javascript
 var page = parseInt(lists.length / 10);
