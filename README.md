@@ -20,7 +20,22 @@ nodejs-express를 사용하여 구현하였음<br>
 <img src="/myapp/public/images/login.png"><br>
 로그인은 사용자의 id와 pw를 데이터베이스에 있는 사용자 정보와 조회해 일치할 경우 로그인 성공<br>
 사용자 정보와 일치하지 않을 경우 경고메시지 출력<br>
-<img src="/myapp/public/images/login_fail.png"><br>
+<img src="/myapp/public/images/login_fail.png"><br><br>
+
+##### 현재 로그인 상태 확인
+
+request와 response를 매개변수로 받아 req.user의 존재 여부로 로그인이 상태를 알려줌
+
+```javascript
+isLogined: function (req, res) {
+    if (req.user) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+```
 
 ## 회원 가입
 

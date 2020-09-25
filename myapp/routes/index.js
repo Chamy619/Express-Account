@@ -43,7 +43,6 @@ router.post("/login/process", function (req, res, next) {
 });
 
 router.get("/", function (req, res, next) {
-  console.log("home", req.user);
   if (auth.isLogined(req, res)) {
     res.render("index", {
       title: "Woori Middle and High School Students Account",
