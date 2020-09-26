@@ -76,8 +76,14 @@ router.post("/outcome/process", function (req, res, next) {
   );
 });
 
-router.get("/list/:pageNum", function (req, res, next) {
+router.get("/list/:pageNum/:col/:sort", function (req, res, next) {
   var pageNum = req.params.pageNum;
+  var or_col = req.params.col;
+  var sorting = req.params.sort;
+  var desc = " ";
+  if (sorting === "-1") {
+    desc = " DESC ";
+  }
   db.query(
     "SELECT COUNT(id) AS num FROM income UNION SELECT COUNT(id) FROM outcome",
     function (err, numbers) {
@@ -93,52 +99,56 @@ router.get("/list/:pageNum", function (req, res, next) {
 
       var pageList = "";
       for (i = 1; i <= page; i++) {
-        pageList += `|<a href=/account/list/${i}>${i}</a>|`;
+        if (i == pageNum) {
+          pageList += `|${i}|`;
+        } else {
+          pageList += `|<a href=/account/list/${i}/${or_col}/${sorting}>${i}</a>|`;
+        }
       }
       var start = (pageNum - 1) * 10;
-
-      db.query(
-        `(SELECT id,1 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM income) UNION (SELECT id,2 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM outcome) order by calen limit ${start}, 10`,
-        function (err, lists) {
-          if (err) {
-            next(err);
-          }
-          console.log(lists);
-          var table_list = "";
-          for (list in lists) {
-            var type = "입금";
-            var action = "income";
-            if (lists[list].type === 2) {
-              type = "출금";
-              action = "outcome";
-            }
-            table_list += "<tr>";
-            table_list += "<td>" + type + "</td>";
-            table_list += "<td>" + lists[list].title + "</td>";
-            table_list += "<td>" + lists[list].price + "</td>";
-            table_list += "<td>" + lists[list].calen + "</td>";
-            table_list += `<td><form action='/account/update/${action}/${lists[list].id}' method='post'><input type='hidden' name='type' value='${lists[list].type}'><input type='submit' value='update'></form></td>`;
-            table_list += `<td><form action='/account/delete/${action}/${lists[list].id}' method='get'><input type='submit' value='delete'></form></td>`;
-            table_list += "</tr>\n";
-          }
-
-          db.query(
-            "SELECT (SELECT SUM(price) FROM income)-(SELECT SUM(price) FROM outcome) AS balance",
-            function (err, bal) {
-              if (err) {
-                next(err);
-              }
-              res.render("list", {
-                name: req.user,
-                title: "List",
-                lists: table_list,
-                balance: bal[0].balance,
-                page: pageList,
-              });
-            }
-          );
+      var sql =
+        `(SELECT id,1 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM income) UNION (SELECT id,2 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM outcome) order by ${or_col}` +
+        desc +
+        `limit ${start}, 10`;
+      db.query(sql, function (err, lists) {
+        if (err) {
+          next(err);
         }
-      );
+        var table_list = "";
+        for (list in lists) {
+          var type = "입금";
+          var action = "income";
+          if (lists[list].type === 2) {
+            type = "출금";
+            action = "outcome";
+          }
+          table_list += "<tr>";
+          table_list += "<td>" + type + "</td>";
+          table_list += "<td>" + lists[list].title + "</td>";
+          table_list += "<td>" + lists[list].price + "</td>";
+          table_list += "<td>" + lists[list].calen + "</td>";
+          table_list += `<td><form action='/account/update/${action}/${lists[list].id}' method='post'><input type='hidden' name='type' value='${lists[list].type}'><input type='submit' value='update'></form></td>`;
+          table_list += `<td><form action='/account/delete/${action}/${lists[list].id}' method='get'><input type='submit' value='delete'></form></td>`;
+          table_list += "</tr>\n";
+        }
+
+        db.query(
+          "SELECT (SELECT SUM(price) FROM income)-(SELECT SUM(price) FROM outcome) AS balance",
+          function (err, bal) {
+            if (err) {
+              next(err);
+            }
+            res.render("list", {
+              name: req.user,
+              title: "List",
+              lists: table_list,
+              balance: bal[0].balance,
+              page: pageList,
+              sort: -sorting,
+            });
+          }
+        );
+      });
     }
   );
 });

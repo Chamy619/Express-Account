@@ -80,30 +80,36 @@ ID를 작성하지 않거나, 이미 존재하는 아이디일 경우, 패스워
 데이터베이스 LIMIT으로 구현하지 않고, 전체 데이터를 받아온 후 javascript를 통해 페이징 기능을 구현<br>
 효율성과 지연 시간을 고려해 추후 데이터베이스 LIMIT으로 변경할 예정<br>
 
-#### 2020.09.25
+## 거래 내역 페이징 (2020.09.26 수정)
 
 거래 내역이 너무 길게 나오는 불편을 해소하기 위해 페이징 기능을 통해 한 페이지에 10개씩 보여주기로 함<br>
 <img src="myapp/public/images/page.png"><br>
+데이터베이스의 부담을 줄이기 위해 LIMIT를 통한 페이징 구현<br><br>
 
-#### 2020.09.25
-
-데이터베이스의 부담을 줄이기 위해 LIMIT를 통한 페이징 구현<br>
-
-```sql
-(SELECT id,1 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM income) UNION (SELECT id,2 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM outcome) order by calen limit ${start}, 10`
-```
+기존 현재 페이지도 클릭이 가능해 새로고침을 하는 상황이 발생하는 불필요함이 발생<br>
+현재 페이지는 a 태그로 감싸지 않도록 하여, 현재 페이지를 새로고침 하는 일이 발생하지 않도록 수정함(2020.09.26)<br>
 
 ```javascript
-var page = parseInt(lists.length / 10);
-if (lists.length % 10 !== 0) {
-  page += 1;
-}
-
 var pageList = "";
 for (i = 1; i <= page; i++) {
-  pageList += `|<a href=/account/list/${i}>${i}</a>|`;
+  if (i == pageNum) {
+    pageList += `|${i}|`;
+  } else {
+    pageList += `|<a href=/account/list/${i}/${or_col}/${sorting}>${i}</a>|`;
+  }
 }
+```
 
-...
-}
+## 거래 내역 정렬 기능 (2020.09.26)
+
+종류, 제목, 금액, 날짜를 클릭하면 원하는 값으로 데이터를 정렬해 보여주는 기능 추가<br>
+이미 한번 정렬 한 후, 같은 칼럼을 한번 더 클릭할 경우 오름차순 -> 내림차순, 내림차순 -> 오름차순으로 정렬되도록 함<br>
+<img src="/myapp/public/images/sorting1.png"><br>
+<img src="/myapp/public/images/sorting2.png"><br>
+
+```javascript
+var sql =
+  `(SELECT id,1 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM income) UNION (SELECT id,2 AS type,DATE_FORMAT(calen,'%Y-%m-%d') AS calen, title, price FROM outcome) order by ${or_col}` +
+  desc +
+  `limit ${start}, 10`;
 ```

@@ -6,10 +6,14 @@ block content
   h1=title
   table
     tr
-      th 종류
-      th 제목
-      th 금액
-      th 날짜
+      th 
+        a(href="/account/list/1/type/#{sort}") 종류
+      th 
+        a(href="/account/list/1/title/#{sort}") 제목
+      th 
+        a(href="/account/list/1/price/#{sort}") 금액
+      th 
+        a(href="/account/list/1/calen/#{sort}") 날짜
       th 수정
       th 삭제
     !{lists}
