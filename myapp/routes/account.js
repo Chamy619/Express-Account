@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../conf/db");
+const detailRouter = require("./detail");
 var auth = require("../public/javascripts/auth");
 
 router.use(function (req, res, next) {
@@ -210,5 +211,7 @@ router.get("/delete/:action/:id", function (req, res, next) {
     res.redirect("/account/list/1");
   });
 });
+
+router.use("/detail", detailRouter);
 
 module.exports = router;
