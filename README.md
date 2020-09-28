@@ -44,9 +44,9 @@ ID와 패스워드를 입력해 회원가입을 진행<br>
 <img src="/myapp/public/images/register.png"><br>
 ID를 작성하지 않거나, 이미 존재하는 아이디일 경우, 패스워드를 작성하지 않거나, 두 개의 패스워드가 일치하지 않을 경우 상황에 맞는 경고메시지 출력<br>
 새로고침 시 경고메시지 삭제<br>
-<img src="/myapp/public/images/register_fail1.png"><br>
-<img src="/myapp/public/images/register_fail2.png"><br>
-<img src="/myapp/public/images/register_fail3.png"><br>
+<img src="/myapp/public/images/register_fail1.png" width=100px>
+<img src="/myapp/public/images/register_fail2.png" width=100px>
+<img src="/myapp/public/images/register_fail3.png" width=100px>
 회원 가입에 성공하면 로그인 화면으로 자동 이동<br>
 회원 가입시 입력한 비밀번호는 암호화해서 저장
 <img src="/myapp/public/images/bcrypt.png"><br>
@@ -118,4 +118,4 @@ css를 사용해 테이블 크기를 고정함
 
 입금 내역과 출금 내역의 title을 선택하면, 선택한 타이틀을 가진 내역만 화면에 출력해주고, 총 금액을 알려줌<br>
 <img src="/myapp/public/images/select.png"><br>
-<img src="/myapp/public.images/detail.png"><br>
+<img src="/myapp/public/images/detail.png"><br>
