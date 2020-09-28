@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  p #{name} welcome || 
+    a(href="/logout") logout
+  h1=title
+  form(action="/account/detail/outcome/list" method="post")
+    select(name="title")
+        !{options}
+    p
+        input(type="submit" value="조회")
