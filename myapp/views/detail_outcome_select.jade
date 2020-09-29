@@ -4,8 +4,17 @@ block content
   p #{name} welcome || 
     a(href="/logout") logout
   h1=title
+  table(class="detail_table")
+    tr
+      th  제목
+      th  금액
+    !{lists}
+  h2 총 액 : #{balance} 
+  br
+  br
   form(action="/account/detail/outcome/list" method="post")
-    select(name="title")
+    p 상세보기
+      select(name="title")
         !{options}
     p
         input(type="submit" value="조회")

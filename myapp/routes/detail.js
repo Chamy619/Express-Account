@@ -51,8 +51,6 @@ router.post("/outcome/list", function (req, res, next) {
         td += `<tr><td>${lists[list].title}</td><td>${lists[list].price}</td><td>${lists[list].calen}</td></tr>`;
         money += lists[list].price;
       }
-      console.log(td);
-      console.log(money);
 
       res.render("detail_list", {
         title: "Outcome Details",
@@ -65,37 +63,55 @@ router.post("/outcome/list", function (req, res, next) {
 });
 
 router.get("/income/select", function (req, res, next) {
-  db.query("SELECT DISTINCT title FROM income", function (err, titles) {
-    if (err) {
-      next(err);
+  db.query(
+    "SELECT title, SUM(price) AS price FROM income GROUP BY title",
+    function (err, titles) {
+      if (err) {
+        next(err);
+      }
+      var options = "";
+      var lists = "";
+      var money = 0;
+      for (title in titles) {
+        lists += `<tr><td>${titles[title].title}</td><td>${titles[title].price}</td></tr>`;
+        money += titles[title].price;
+        options += `<option>${titles[title].title}</option>`;
+      }
+      res.render("detail_income_select", {
+        title: "Income Detail",
+        lists: lists,
+        balance: money,
+        name: req.user,
+        options: options,
+      });
     }
-    var options = "";
-    for (title in titles) {
-      options += `<option>${titles[title].title}</option>`;
-    }
-    res.render("detail_income_select", {
-      title: "Income Detail",
-      name: req.user,
-      options: options,
-    });
-  });
+  );
 });
 
 router.get("/outcome/select", function (req, res, next) {
-  db.query("SELECT DISTINCT title FROM outcome", function (err, titles) {
-    if (err) {
-      next(err);
+  db.query(
+    "SELECT title, SUM(price) AS price FROM outcome GROUP BY title",
+    function (err, titles) {
+      if (err) {
+        next(err);
+      }
+      var options = "";
+      var lists = "";
+      var money = 0;
+      for (title in titles) {
+        lists += `<tr><td>${titles[title].title}</td><td>${titles[title].price}</td></tr>`;
+        money += titles[title].price;
+        options += `<option>${titles[title].title}</option>`;
+      }
+      res.render("detail_outcome_select", {
+        title: "Outcome Detail",
+        lists: lists,
+        balance: money,
+        name: req.user,
+        options: options,
+      });
     }
-    var options = "";
-    for (title in titles) {
-      options += `<option>${titles[title].title}</option>`;
-    }
-    res.render("detail_outcome_select", {
-      title: "Outcome Detail",
-      name: req.user,
-      options: options,
-    });
-  });
+  );
 });
 
 module.exports = router;

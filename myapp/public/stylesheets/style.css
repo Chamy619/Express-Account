@@ -16,3 +16,9 @@ table {
 .footer {
   padding-top: 10px;
 }
+
+.detail_table {
+  width: 400px;
+  table-layout: fixed;
+  text-align: center;
+}
