@@ -124,4 +124,4 @@ css를 사용해 테이블 크기를 고정함
 
 입출금 거래 내역 분석에 들어가면 입금 또는 출금 별 사용 금액을 보여주는 테이블 추가<br>
 총 입금액 또는 총 출금액 출력<br>
-<img src="/myapp/public/images/detailModity.png"><br>
+<img src="/myapp/public/images/detailModify.png"><br>
