@@ -114,11 +114,13 @@ var sql =
 
 css를 사용해 테이블 크기를 고정함
 
-## 거래 내역 분석 (2020.09.28 신규)
+## 거래 내역 분석 (2020.09.29 수정)
 
 입금 내역과 출금 내역의 title을 선택하면, 선택한 타이틀을 가진 내역만 화면에 출력해주고, 총 금액을 알려줌<br>
+금액, 날짜로 정렬할 수 있는 기능 추가<br>
 <img src="/myapp/public/images/select.png"><br>
 <img src="/myapp/public/images/detail.png"><br>
+<img src="/myapp/public/images/detail_sort.png"><br>
 
 ## 거래 내역 분석 리스트 (2020.09.29 신규)
 

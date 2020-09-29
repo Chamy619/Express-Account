@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  p #{name} welcome || 
+    a(href="/logout") logout
+  h1=title
+  table
+    tr
+      th 
+        a(href="/account/detail/outcome/#{col}/title/#{sort}") 제목
+      th 
+        a(href="/account/detail/outcome/#{col}/price/#{sort}") 금액
+      th 
+        a(href="/account/detail/outcome/#{col}/calen/#{sort}") 날짜
+    !{lists}
+    tr
+      td(colspan=6 class="footer")
+        !{page}
+  h2 총 금액 : #{balance} 원

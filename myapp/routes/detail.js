@@ -24,14 +24,14 @@ router.post("/income/list", function (req, res, next) {
         td += `<tr><td>${lists[list].title}</td><td>${lists[list].price}</td><td>${lists[list].calen}</td></tr>`;
         money += lists[list].price;
       }
-      console.log(td);
-      console.log(money);
 
-      res.render("detail_list", {
+      res.render("detail_income_list", {
         title: "Income Details",
         name: req.user,
         lists: td,
         balance: money,
+        sort: 1,
+        col: req.body.title,
       });
     }
   );
@@ -52,11 +52,13 @@ router.post("/outcome/list", function (req, res, next) {
         money += lists[list].price;
       }
 
-      res.render("detail_list", {
+      res.render("detail_outcome_list", {
         title: "Outcome Details",
         name: req.user,
         lists: td,
         balance: money,
+        sort: 1,
+        col: req.body.title,
       });
     }
   );
@@ -112,6 +114,62 @@ router.get("/outcome/select", function (req, res, next) {
       });
     }
   );
+});
+
+router.get("/income/:title/:column/:sort", function (req, res, next) {
+  var DESC = "";
+  if (req.params.sort === "-1") {
+    DESC = " DESC";
+  }
+  var sql = `SELECT title, price, DATE_FORMAT(calen,'%Y-%m-%d') AS calen FROM income WHERE title='${req.params.title}' ORDER BY ${req.params.column} ${DESC}`;
+  db.query(sql, function (err, rows) {
+    if (err) {
+      next(err);
+    }
+    var lists = "";
+    var balance = 0;
+    for (row in rows) {
+      lists += `<tr><td>${rows[row].title}</td><td>${rows[row].price}</td><td>${rows[row].calen}</td></tr>`;
+      balance += rows[row].price;
+    }
+
+    res.render("detail_income_list", {
+      title: "Income Detail",
+      name: req.user,
+      lists: lists,
+      balance: balance,
+      sort: -req.params.sort,
+      col: req.params.title,
+    });
+  });
+});
+
+router.get("/outcome/:title/:column/:sort", function (req, res, next) {
+  var DESC = "";
+  if (req.params.sort === "-1") {
+    DESC = " DESC";
+  }
+  var sql = `SELECT title, price, DATE_FORMAT(calen,'%Y-%m-%d') AS calen FROM outcome WHERE title='${req.params.title}' ORDER BY ${req.params.column} ${DESC}`;
+  db.query(sql, function (err, rows) {
+    if (err) {
+      next(err);
+    }
+    var lists = "";
+    var balance = 0;
+    for (row in rows) {
+      lists += `<tr><td>${rows[row].title}</td><td>${rows[row].price}</td><td>${rows[row].calen}</td></tr>`;
+      balance += rows[row].price;
+    }
+
+    res.render("detail_outcome_list", {
+      title: "Outcome Detail",
+      name: req.user,
+      lists: lists,
+      balance: balance,
+      sort: -req.params.sort,
+      col: req.params.title,
+    });
+  });
 });
 
 module.exports = router;
